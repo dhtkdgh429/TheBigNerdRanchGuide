@@ -122,10 +122,10 @@
         <!--Map-->
         <scene sceneID="gDE-w9-JFd">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Fy8-zD-OZQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="Kmi-pg-itE" customClass="MapViewController" customModule="WorldTrotter" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Map" selectedImage="MapIcon" id="oKY-8Z-PLv"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fy8-zD-OZQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1844" y="27.436281859070466"/>
         </scene>
@@ -140,8 +140,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="KQE-Hh-diy" kind="relationship" relationship="viewControllers" id="9U1-0E-V0r"/>
                         <segue destination="Kmi-pg-itE" kind="relationship" relationship="viewControllers" id="o4u-hb-ZZh"/>
+                        <segue destination="KQE-Hh-diy" kind="relationship" relationship="viewControllers" id="9U1-0E-V0r"/>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="1nJ-Ih-w0k"/>
                     </connections>
                 </tabBarController>
