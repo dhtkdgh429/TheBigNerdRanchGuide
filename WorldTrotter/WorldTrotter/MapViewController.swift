@@ -20,6 +20,7 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var pinButton: UIButton!
     
     private var isExistsPin: Bool = false
+    private var showCount: Int = 0
     
     // data...
     private let titleArr = ["Home", "Hollys", "Seohyun Station"]
@@ -185,19 +186,27 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate {
         isExistsPin = true
     }
     
-    private func showPinPoint() {
+    private func showPinPoint(index: Int) {
         
-        let pinList = mapView.annotations.map {$0.isKind(of: MKPointAnnotation.self)}
-        print(pinList)
+        var pinList = [MKAnnotation]()
+        
         for annotation in mapView.annotations {
             if annotation.isKind(of: MKPointAnnotation.self) {
-                var region = MKCoordinateRegion()
-                let coordinate = annotation.coordinate
-                region.center = coordinate
-                region.span = mapView.region.span
-                
-                mapView.setRegion(region, animated: true)
+                pinList.append(annotation)
             }
+        }
+        
+        if let annotation = pinList[index] as? MKPointAnnotation {
+            var region = MKCoordinateRegion()
+            let coordinate = annotation.coordinate
+            region.center = coordinate
+            region.span = mapView.region.span
+            
+            mapView.setRegion(region, animated: true)
+        }
+        showCount += 1
+        if showCount == 3 {
+            showCount = 0
         }
     }
     
@@ -241,7 +250,8 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate {
             print("call add Pin")
             addPinPoint()
         } else {
-            showPinPoint()
+            print("call show pin")
+            showPinPoint(index: showCount)
         }
     }
 }
