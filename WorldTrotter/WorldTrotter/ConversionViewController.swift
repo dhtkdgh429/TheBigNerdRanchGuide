@@ -38,10 +38,11 @@ class ConversionViewController: UIViewController {
         }
     }
     
-    
     override func viewDidLoad() {
-        celsiusLabel.text = "???"
         print("Conversion View did load!!")
+        celsiusLabel.text = "???"
+        let locale = NSLocale.current
+        print("language : \(locale)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,8 +74,8 @@ class ConversionViewController: UIViewController {
     }
     
     @IBAction func fahrenheitFieldEditingChanged(textField: UITextField) {
-        if let text = textField.text, let value = Double(text) {
-            fahrenheitValue = value
+        if let text = textField.text, let number = numberFormatter.number(from: text) {
+            fahrenheitValue = number.doubleValue
         } else {
             fahrenheitValue = nil
         }
@@ -87,9 +88,13 @@ class ConversionViewController: UIViewController {
 
 extension ConversionViewController : UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // 소수점(.) 2개 이상 입력 시 false
-        let existingTextHasDecimalSeparator = textField.text?.range(of: ".")
-        let replacementTextHasDecimalSeparator = string.range(of: ".")
+        
+        // locale 언어에 따라 소수점 구분자 사용..
+        let currentLocale = NSLocale.current
+        let decimalSeparator = currentLocale.decimalSeparator
+        
+        let existingTextHasDecimalSeparator = textField.text?.range(of: decimalSeparator!)
+        let replacementTextHasDecimalSeparator = string.range(of: decimalSeparator!)
         
         if existingTextHasDecimalSeparator != nil && replacementTextHasDecimalSeparator != nil {
             return false
