@@ -13,7 +13,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="BigNerd_01" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Quiz" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -22,6 +22,12 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="???" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jnx-DK-dzh">
+                                        <rect key="frame" x="175" y="48" width="25" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="???" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MJx-6x-7o3">
                                         <rect key="frame" x="175" y="48" width="25" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
@@ -52,12 +58,15 @@
                                 <constraints>
                                     <constraint firstItem="r6d-w3-Kt5" firstAttribute="centerX" secondItem="Lfb-Or-r6W" secondAttribute="centerX" id="4e2-NQ-0cu"/>
                                     <constraint firstItem="Jnx-DK-dzh" firstAttribute="centerX" secondItem="Lfb-Or-r6W" secondAttribute="centerX" id="81F-oK-6ss"/>
+                                    <constraint firstItem="WOy-le-rRr" firstAttribute="top" secondItem="MJx-6x-7o3" secondAttribute="bottom" constant="8" id="923-2F-Ehh"/>
                                     <constraint firstItem="m1P-CH-g1o" firstAttribute="top" secondItem="WOy-le-rRr" secondAttribute="bottom" constant="60" id="96i-W3-HIy"/>
                                     <constraint firstItem="m1P-CH-g1o" firstAttribute="centerX" secondItem="Lfb-Or-r6W" secondAttribute="centerX" id="FNg-z9-uf1"/>
                                     <constraint firstItem="r6d-w3-Kt5" firstAttribute="top" secondItem="m1P-CH-g1o" secondAttribute="bottom" constant="8" id="G13-7c-vDb"/>
                                     <constraint firstItem="WOy-le-rRr" firstAttribute="centerX" secondItem="Lfb-Or-r6W" secondAttribute="centerX" id="IPb-Ps-KTl"/>
                                     <constraint firstItem="WOy-le-rRr" firstAttribute="top" secondItem="Jnx-DK-dzh" secondAttribute="bottom" constant="8" id="Ls0-GR-17W"/>
+                                    <constraint firstItem="MJx-6x-7o3" firstAttribute="centerX" secondItem="Lfb-Or-r6W" secondAttribute="centerX" id="QIg-uu-NU2"/>
                                     <constraint firstItem="Jnx-DK-dzh" firstAttribute="top" secondItem="Lfb-Or-r6W" secondAttribute="top" constant="48" id="Xhq-3F-qR6"/>
+                                    <constraint firstItem="MJx-6x-7o3" firstAttribute="top" secondItem="Lfb-Or-r6W" secondAttribute="top" constant="48" id="xz6-T0-lLu"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -72,7 +81,10 @@
                     </view>
                     <connections>
                         <outlet property="answerLabel" destination="m1P-CH-g1o" id="4My-0j-1Tt"/>
-                        <outlet property="questionLabel" destination="Jnx-DK-dzh" id="ct6-nh-Ehq"/>
+                        <outlet property="currentQuestionLabel" destination="Jnx-DK-dzh" id="ihZ-6S-o3k"/>
+                        <outlet property="currentQuestionLabelCenterX" destination="81F-oK-6ss" id="k6V-l2-Pp4"/>
+                        <outlet property="nextQuestionLabel" destination="MJx-6x-7o3" id="Scl-F3-rT5"/>
+                        <outlet property="nextQuestionLabelCenterX" destination="QIg-uu-NU2" id="5bp-9D-uPt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

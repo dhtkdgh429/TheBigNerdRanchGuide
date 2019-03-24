@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  BigNerd_01
+//  Quiz
 //
 //  Created by Oh Sangho on 16/03/2019.
 //  Copyright © 2019 Oh Sangho. All rights reserved.
