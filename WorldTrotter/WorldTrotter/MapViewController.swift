@@ -126,8 +126,13 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate {
         pinBtnTrailing.isActive = true
         pinBtnBottom.isActive = true
         
+        
+        // localized.
+        let standardString = NSLocalizedString("Standard", comment: "Standard map view")
+        let satelliteString = NSLocalizedString("Satellite", comment: "Satellite map view")
+        let hybridString = NSLocalizedString("Hybrid", comment: "Hybrid map view")
         // 맵 컨트롤 버튼 추가하기.
-        let segmentedControl = UISegmentedControl(items: ["Standard", "Hybrid", "Satellite"])
+        let segmentedControl = UISegmentedControl(items: [standardString, satelliteString, hybridString])
         segmentedControl.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         segmentedControl.selectedSegmentIndex = 0
         
