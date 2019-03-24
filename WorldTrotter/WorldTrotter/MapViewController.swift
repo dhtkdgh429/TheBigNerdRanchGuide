@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private var mapView: MKMapView!
     private var locationManager = CLLocationManager()
@@ -17,8 +17,17 @@ class MapViewController: UIViewController {
     private var currentLocationButton: UIButton!
     private var zoomInButton: UIButton!
     private var zoomOutButton: UIButton!
+    private var pinButton: UIButton!
     
-//    private var lastLocation: MKUserLocation?
+    private var isExistsPin: Bool = false
+    private var showCount: Int = 0
+    
+    // data...
+    private let titleArr = ["Home", "Hollys", "Seohyun Station"]
+    private let subTitleArr = ["My Home", "My Study Cafe", "nearby Station"]
+    private let latitudeArr = [37.385201, 37.384301, 37.3849906]
+    private let longitudeArr = [127.129227, 127.130915, 127.1229633]
+    
     
     override func loadView() {
         print("Map View load!!")
@@ -38,6 +47,7 @@ class MapViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         // 위치 업데이트 시작.
         locationManager.startUpdatingLocation()
+        print("start location update")
         
         mapView.delegate = self
         mapView.showsUserLocation = true
@@ -50,7 +60,7 @@ class MapViewController: UIViewController {
         currentLocationButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         currentLocationButton.setTitleColor(UIColor.black, for: .normal)
         currentLocationButton.setTitle("현재 위치", for: .normal)
-        currentLocationButton.addTarget(self, action: #selector(updateUserLocation), for: .touchUpInside)
+        currentLocationButton.addTarget(self, action: #selector(touchedCurrentUserLocationButton), for: .touchUpInside)
         view.addSubview(currentLocationButton!)
         // 버튼 width = 스크린 넓이/2 - layout 마진 8.0 (11버전 이상에서는 20)
         var screenWidth = UIScreen.main.bounds.width / 2 - 8.0
@@ -71,6 +81,7 @@ class MapViewController: UIViewController {
         zoomInButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         zoomInButton.setTitleColor(UIColor.black, for: .normal)
         zoomInButton.setTitle("+", for: .normal)
+        zoomInButton.addTarget(self, action: #selector(touchedZoomInButton), for: .touchUpInside)
         view.addSubview(zoomInButton!)
         
         let zoomInBtnLeading = zoomInButton.leadingAnchor.constraint(equalTo: currentLocationButton.trailingAnchor, constant: 5.0)
@@ -85,6 +96,7 @@ class MapViewController: UIViewController {
         zoomOutButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         zoomOutButton.setTitleColor(UIColor.black, for: .normal)
         zoomOutButton.setTitle("-", for: .normal)
+        zoomOutButton.addTarget(self, action: #selector(touchedZoomOutButton), for: .touchUpInside)
         view.addSubview(zoomOutButton)
         
         let zoomOutBtnLeading = zoomOutButton.leadingAnchor.constraint(equalTo: zoomInButton.trailingAnchor, constant: 5.0)
@@ -95,6 +107,24 @@ class MapViewController: UIViewController {
         zoomOutBtnTrailing.isActive = true
         zoomOutBtnBottom.isActive = true
         zoomOutBtnWidth.isActive = true
+        
+        // 핀 버튼...
+        pinButton = UIButton(type: .custom)
+        pinButton.backgroundColor = UIColor.white.withAlphaComponent(0.5)
+        pinButton.translatesAutoresizingMaskIntoConstraints = false
+        pinButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        pinButton.setTitleColor(UIColor.black, for: .normal)
+        pinButton.setTitle("Pin", for: .normal)
+        pinButton.addTarget(self, action: #selector(touchedPinButton), for: .touchUpInside)
+        view.addSubview(pinButton)
+        
+        let pinBtnLeading = pinButton.leadingAnchor.constraint(equalTo: zoomOutButton.leadingAnchor)
+        let pinBtnTrailing = pinButton.trailingAnchor.constraint(equalTo: zoomOutButton.trailingAnchor)
+        let pinBtnBottom = pinButton.bottomAnchor.constraint(equalTo: zoomOutButton.topAnchor, constant: -10.0)
+        
+        pinBtnLeading.isActive = true
+        pinBtnTrailing.isActive = true
+        pinBtnBottom.isActive = true
         
         // 맵 컨트롤 버튼 추가하기.
         let segmentedControl = UISegmentedControl(items: ["Standard", "Hybrid", "Satellite"])
@@ -117,19 +147,67 @@ class MapViewController: UIViewController {
         
     }
     
-    @objc func updateUserLocation() {
+    override func viewDidLoad() {
+        print("Map View did load!!")
+        
+    }
+    
+    @objc func updateUserLocation(span: MKCoordinateSpan, button: UIButton) {
         var region = MKCoordinateRegion()
         let userCoord = mapView.userLocation.coordinate
         
         //Zoom 설정
-        region.span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        region.span = span
+
         //위치(경도,위도) 설정
         let coordinate = CLLocationCoordinate2D(latitude: userCoord.latitude, longitude: userCoord.longitude)
-        //center 설정
-        region.center = coordinate
+        
+        //center 설정. zoom 버튼 예외처리.
+        if button == zoomInButton || button == zoomOutButton {
+            region.center = mapView.centerCoordinate
+        } else {
+            region.center = coordinate
+        }
+    
         mapView.setRegion(region, animated: true)
         print("update")
         
+    }
+    
+    private func addPinPoint() {
+        for index in 0..<3 {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = CLLocationCoordinate2D(latitude: latitudeArr[index], longitude: longitudeArr[index])
+            annotation.title = titleArr[index]
+            annotation.subtitle = subTitleArr[index]
+            mapView.addAnnotation(annotation)
+            print("Add Pin : \(titleArr[index])")
+        }
+        isExistsPin = true
+    }
+    
+    private func showPinPoint(index: Int) {
+        
+        var pinList = [MKAnnotation]()
+        
+        for annotation in mapView.annotations {
+            if annotation.isKind(of: MKPointAnnotation.self) {
+                pinList.append(annotation)
+            }
+        }
+        
+        if let annotation = pinList[index] as? MKPointAnnotation {
+            var region = MKCoordinateRegion()
+            let coordinate = annotation.coordinate
+            region.center = coordinate
+            region.span = mapView.region.span
+            
+            mapView.setRegion(region, animated: true)
+        }
+        showCount += 1
+        if showCount == 3 {
+            showCount = 0
+        }
     }
     
     // 맵 컨트롤 버튼 액션
@@ -146,16 +224,44 @@ class MapViewController: UIViewController {
         }
     }
     
-    override func viewDidLoad() {
-        print("Map View did load!!")
+    @objc func touchedCurrentUserLocationButton() {
+        print("Current Location Update : \(mapView.userLocation.coordinate)")
+        updateUserLocation(span: mapView.region.span, button: currentLocationButton)
+    }
+    
+    
+    @objc func touchedZoomInButton() {
+        print("Zoom In x 10")
+        let currentSpan = mapView.region.span
+        let span = MKCoordinateSpan(latitudeDelta: currentSpan.latitudeDelta / 2, longitudeDelta: currentSpan.longitudeDelta / 2)
+        updateUserLocation(span: span, button: zoomInButton)
+    }
+    
+    @objc func touchedZoomOutButton() {
+        print("Zoom Out")
+        let currentSpan = mapView.region.span
+        let span = MKCoordinateSpan(latitudeDelta: currentSpan.latitudeDelta * 2, longitudeDelta: currentSpan.longitudeDelta * 2)
+        updateUserLocation(span: span, button: zoomInButton)
+    }
+    
+    // pin button action
+    @objc func touchedPinButton() {
+        if !isExistsPin {
+            print("call add Pin")
+            addPinPoint()
+        } else {
+            print("call show pin")
+            showPinPoint(index: showCount)
+        }
     }
 }
 
 extension MapViewController : MKMapViewDelegate {
     //Adjusting the zoom
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-//        self.lastLocation = userLocation
-        self.updateUserLocation()
+        // delta 0.01.. 100배 확대.
+        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        self.updateUserLocation(span: span, button: currentLocationButton)
     }
     
     func mapViewWillStartLocatingUser(_ mapView: MKMapView) {
