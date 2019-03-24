@@ -15,7 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CBD67758223CE5FE00908BEE /* BigNerd_01.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BigNerd_01.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBD67758223CE5FE00908BEE /* Quiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBD6775B223CE5FE00908BEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBD6775D223CE5FE00908BEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CBD67760223CE5FE00908BEE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -38,7 +38,7 @@
 		CBD6774F223CE5FE00908BEE = {
 			isa = PBXGroup;
 			children = (
-				CBD6775A223CE5FE00908BEE /* BigNerd_01 */,
+				CBD6775A223CE5FE00908BEE /* Quiz */,
 				CBD67759223CE5FE00908BEE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,12 +46,12 @@
 		CBD67759223CE5FE00908BEE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CBD67758223CE5FE00908BEE /* BigNerd_01.app */,
+				CBD67758223CE5FE00908BEE /* Quiz.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CBD6775A223CE5FE00908BEE /* BigNerd_01 */ = {
+		CBD6775A223CE5FE00908BEE /* Quiz */ = {
 			isa = PBXGroup;
 			children = (
 				CBD6775B223CE5FE00908BEE /* AppDelegate.swift */,
@@ -61,15 +61,15 @@
 				CBD67764223CE5FF00908BEE /* LaunchScreen.storyboard */,
 				CBD67767223CE5FF00908BEE /* Info.plist */,
 			);
-			path = BigNerd_01;
+			path = Quiz;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CBD67757223CE5FE00908BEE /* BigNerd_01 */ = {
+		CBD67757223CE5FE00908BEE /* Quiz */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CBD6776A223CE5FF00908BEE /* Build configuration list for PBXNativeTarget "BigNerd_01" */;
+			buildConfigurationList = CBD6776A223CE5FF00908BEE /* Build configuration list for PBXNativeTarget "Quiz" */;
 			buildPhases = (
 				CBD67754223CE5FE00908BEE /* Sources */,
 				CBD67755223CE5FE00908BEE /* Frameworks */,
@@ -79,9 +79,9 @@
 			);
 			dependencies = (
 			);
-			name = BigNerd_01;
+			name = Quiz;
 			productName = BigNerd_01;
-			productReference = CBD67758223CE5FE00908BEE /* BigNerd_01.app */;
+			productReference = CBD67758223CE5FE00908BEE /* Quiz.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,7 +99,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CBD67753223CE5FE00908BEE /* Build configuration list for PBXProject "BigNerd_01" */;
+			buildConfigurationList = CBD67753223CE5FE00908BEE /* Build configuration list for PBXProject "Quiz" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -112,7 +112,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CBD67757223CE5FE00908BEE /* BigNerd_01 */,
+				CBD67757223CE5FE00908BEE /* Quiz */,
 			);
 		};
 /* End PBXProject section */
@@ -284,12 +284,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LZZVJD724V;
-				INFOPLIST_FILE = BigNerd_01/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Quiz/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "OhSangho.BigNerd-01";
+				PRODUCT_BUNDLE_IDENTIFIER = OhSangho.Quiz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -302,12 +302,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LZZVJD724V;
-				INFOPLIST_FILE = BigNerd_01/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Quiz/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "OhSangho.BigNerd-01";
+				PRODUCT_BUNDLE_IDENTIFIER = OhSangho.Quiz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -317,7 +317,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CBD67753223CE5FE00908BEE /* Build configuration list for PBXProject "BigNerd_01" */ = {
+		CBD67753223CE5FE00908BEE /* Build configuration list for PBXProject "Quiz" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CBD67768223CE5FF00908BEE /* Debug */,
@@ -326,7 +326,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CBD6776A223CE5FF00908BEE /* Build configuration list for PBXNativeTarget "BigNerd_01" */ = {
+		CBD6776A223CE5FF00908BEE /* Build configuration list for PBXNativeTarget "Quiz" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CBD6776B223CE5FF00908BEE /* Debug */,
