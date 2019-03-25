@@ -18,8 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // app 시작점에 저장소(모델) 설정.
         let itemStore = ItemStore()
-        let itemsController = window?.rootViewController as! ItemsViewController
+        let imageStore = ImageStore()
+        
+        let naviController = window?.rootViewController as! UINavigationController
+        let itemsController = naviController.topViewController as! ItemsViewController
+        
         itemsController.itemStore = itemStore
+        itemsController.imageStore = imageStore
         
         return true
     }

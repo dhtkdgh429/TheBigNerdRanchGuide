@@ -13,6 +13,13 @@ class ItemsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var itemStore: ItemStore!
+    var imageStore: ImageStore!
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        navigationItem.leftBarButtonItem = editButtonItem
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,10 +29,31 @@ class ItemsViewController: UIViewController {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "defaultIdentifier")
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+        
+    }
+    
     // UIViewController에 TableView 붙여서 하는 경우, editing 오버라이딩해서..
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         self.tableView.setEditing(editing, animated: animated)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowItem" {
+            // tableview의 선택된 셀...
+            if let row = tableView.indexPathForSelectedRow?.row {
+                // 선택된 셀의 item을 detailView의 item에 전달...
+                let item = itemStore.allItems[row]
+                let detailViewController = segue.destination as! DetailViewController
+                detailViewController.item = item
+                detailViewController.imageStore = imageStore
+            }
+        }
     }
     
     @IBAction func addNewItem(sender: AnyObject) {
@@ -38,22 +66,7 @@ class ItemsViewController: UIViewController {
             
             tableView.insertRows(at: [indexPath], with: .automatic)
         }
-        
     }
-    
-    @IBAction func toggleEditingMode(sender: AnyObject) {
-        // 편집 모드인 경우,,
-        if isEditing {
-            sender.setTitle("Edit", for: .normal)
-            // 끝내기..
-            setEditing(false, animated: true)
-        } else {
-            sender.setTitle("Done", for: .normal)
-            // 편집 모드로..
-            setEditing(true, animated: true)
-        }
-    }
-    
 }
 
 extension ItemsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -72,19 +85,22 @@ extension ItemsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let identifier = "UITableViewCell"
-            let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+            let identifier = "ItemCell"
+            let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ItemCell
             
             let item = itemStore.allItems[indexPath.row]
             
-            cell.textLabel?.text = item.name
-            cell.detailTextLabel?.text = "$\(item.valueInDollars)"
+            cell.updateLabels()
+            
+            cell.nameLabel.text = item.name
+            cell.serialNumberLabel.text = item.serialNumber
+            cell.valueLabel.text = "$\(item.valueInDollars)"
             
             return cell
         } else {
             let identifier = "defaultIdentifier"
             let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
-            
+            cell.selectionStyle = .none
             cell.textLabel?.text = "No more items!"
             return cell
         }

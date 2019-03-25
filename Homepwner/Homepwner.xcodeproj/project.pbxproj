@@ -15,6 +15,10 @@
 		CBC349F7224784150088D1FE /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC349F6224784150088D1FE /* Item.swift */; };
 		CBC349F9224787670088D1FE /* ItemStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC349F8224787670088D1FE /* ItemStore.swift */; };
 		CBC349FC2247C27C0088D1FE /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC349FB2247C27C0088D1FE /* ItemCell.swift */; };
+		F225336E224875F700095937 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F225336D224875F700095937 /* DetailViewController.swift */; };
+		F22533782248AEFA00095937 /* detailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22533772248AEFA00095937 /* detailTextField.swift */; };
+		F225337B2248BDF400095937 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F225337A2248BDF400095937 /* DatePickerViewController.swift */; };
+		F225337D2248D00C00095937 /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F225337C2248D00C00095937 /* ImageStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +32,10 @@
 		CBC349F6224784150088D1FE /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		CBC349F8224787670088D1FE /* ItemStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStore.swift; sourceTree = "<group>"; };
 		CBC349FB2247C27C0088D1FE /* ItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
+		F225336D224875F700095937 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		F22533772248AEFA00095937 /* detailTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = detailTextField.swift; sourceTree = "<group>"; };
+		F225337A2248BDF400095937 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
+		F225337C2248D00C00095937 /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,9 +70,10 @@
 			children = (
 				CBC349F5224784020088D1FE /* Model */,
 				CBC349E3224781BE0088D1FE /* AppDelegate.swift */,
-				CBC349FA2247923A0088D1FE /* Items */,
-				CBC349E7224781BE0088D1FE /* Main.storyboard */,
+				F2253370224878C900095937 /* Controller */,
+				F225336F224878BC00095937 /* View */,
 				CBC349EA224781BF0088D1FE /* Assets.xcassets */,
+				F22533762248AECA00095937 /* Extension */,
 				CBC349EC224781BF0088D1FE /* LaunchScreen.storyboard */,
 				CBC349EF224781BF0088D1FE /* Info.plist */,
 			);
@@ -75,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				CBC349F8224787670088D1FE /* ItemStore.swift */,
+				F225337C2248D00C00095937 /* ImageStore.swift */,
 				CBC349F6224784150088D1FE /* Item.swift */,
 			);
 			path = Model;
@@ -85,8 +95,50 @@
 			children = (
 				CBC349E5224781BE0088D1FE /* ItemsViewController.swift */,
 				CBC349FB2247C27C0088D1FE /* ItemCell.swift */,
+				F225336C2248758E00095937 /* DetailItem */,
 			);
 			path = Items;
+			sourceTree = "<group>";
+		};
+		F225336C2248758E00095937 /* DetailItem */ = {
+			isa = PBXGroup;
+			children = (
+				F225336D224875F700095937 /* DetailViewController.swift */,
+			);
+			path = DetailItem;
+			sourceTree = "<group>";
+		};
+		F225336F224878BC00095937 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CBC349E7224781BE0088D1FE /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F2253370224878C900095937 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F22533792248BDD600095937 /* DatePicker */,
+				CBC349FA2247923A0088D1FE /* Items */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F22533762248AECA00095937 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				F22533772248AEFA00095937 /* detailTextField.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		F22533792248BDD600095937 /* DatePicker */ = {
+			isa = PBXGroup;
+			children = (
+				F225337A2248BDF400095937 /* DatePickerViewController.swift */,
+			);
+			path = DatePicker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +215,10 @@
 				CBC349E6224781BE0088D1FE /* ItemsViewController.swift in Sources */,
 				CBC349F7224784150088D1FE /* Item.swift in Sources */,
 				CBC349F9224787670088D1FE /* ItemStore.swift in Sources */,
+				F225336E224875F700095937 /* DetailViewController.swift in Sources */,
+				F225337B2248BDF400095937 /* DatePickerViewController.swift in Sources */,
+				F225337D2248D00C00095937 /* ImageStore.swift in Sources */,
+				F22533782248AEFA00095937 /* detailTextField.swift in Sources */,
 				CBC349E4224781BE0088D1FE /* AppDelegate.swift in Sources */,
 				CBC349FC2247C27C0088D1FE /* ItemCell.swift in Sources */,
 			);
@@ -313,6 +369,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LZZVJD724V;
 				INFOPLIST_FILE = Homepwner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -331,6 +388,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LZZVJD724V;
 				INFOPLIST_FILE = Homepwner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
