@@ -12,13 +12,16 @@ class Item: NSObject {
     var name: String
     var valueInDollars: Int
     var serialNumber: String?
-    let dateCreated: NSDate
-
+    var dateCreated: Date
+    let itemKey: String
+    
     init(name: String, serialNumber: String?, valueInDollars: Int) {
         self.name = name
         self.valueInDollars = valueInDollars
         self.serialNumber = serialNumber
-        self.dateCreated = NSDate()
+        self.dateCreated = Date()
+        // 이미지 캐싱을 위한 uuid set..
+        self.itemKey = NSUUID().uuidString
         
         super.init()
     }
