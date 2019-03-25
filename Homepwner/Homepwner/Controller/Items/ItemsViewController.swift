@@ -133,8 +133,11 @@ extension ItemsViewController: UITableViewDelegate, UITableViewDataSource {
             
             let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
                 
-                // item 데이터 삭제..
+                // itemStore에서 item 데이터 삭제..
                 self.itemStore.removeItem(item: item)
+                
+                // imageStore에서 해당 이미지 캐시 삭제...
+                self.imageStore.deleteImageForKey(key: item.itemKey)
                 
                 // 애니메이션과 함께 테이블 뷰에서 삭제..
                 tableView.deleteRows(at: [indexPath], with: .automatic)
