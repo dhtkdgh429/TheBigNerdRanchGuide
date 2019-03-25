@@ -54,6 +54,12 @@ class DetailViewController: UIViewController {
         serialNumberField.text = item.serialNumber
         valueField.text = numberFormatter.string(from: item!.valueInDollars as NSNumber)
         dateLabel.text = dateFormatter.string(from: item!.dateCreated as Date)
+        
+        let key = item.itemKey
+        // key에 해당하는 이미지가 있으면, 이미지를 보여줌..
+        if let imageToDisplay = imageStore.imageForKey(key: key) {
+            imageView.image = imageToDisplay
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -118,7 +124,7 @@ extension DetailViewController : UINavigationControllerDelegate, UIImagePickerCo
         // 딕셔너리에서 선택된 이미지....
         let image = info[.originalImage] as! UIImage
         
-        // 이미지를 item key(uuid)로 저장소에 set...
+        // 이미지를 item key(uuid)로 저장소에 캐시 저장...
         imageStore.setImage(image: image, forKey: item.itemKey)
         
         self.imageView.image = image
