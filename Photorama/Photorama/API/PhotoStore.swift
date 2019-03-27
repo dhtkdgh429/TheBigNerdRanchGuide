@@ -37,6 +37,7 @@ class PhotoStore {
             
             let result = self.processRecentPhotosRequest(data: data, error: error)
             
+            print("Photo response: \(response)")
             completion(result)
             
         }
@@ -52,6 +53,12 @@ class PhotoStore {
     }
     
     func fetchImageForPhoto(photo:Photo, completion: @escaping (ImageResult) -> Void) {
+        
+        // 이미지를 이미 받았다면, return...
+        if let image = photo.image {
+            completion(.Success(image))
+            return
+        }
         
         let photoURL = photo.remoteURL
         let request = URLRequest(url: photoURL)
@@ -69,7 +76,7 @@ class PhotoStore {
 //            case let .Failure(_):
 //                break
 //            }
-            
+            print("Image response: \(response)")
             completion(result)
         }
         task.resume()

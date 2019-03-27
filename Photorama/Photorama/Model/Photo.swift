@@ -22,3 +22,11 @@ class Photo {
         self.dateTaken = dateTaken
     }
 }
+
+
+// MARK: - Equatable
+extension Photo : Equatable {}
+    func == (lhs: Photo, rhs: Photo) -> Bool {
+        // 같은 photoID를 가지면 같은 사진임...
+        return lhs.photoID == rhs.photoID
+    }
