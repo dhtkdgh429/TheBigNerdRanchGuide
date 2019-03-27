@@ -9,19 +9,22 @@
 import UIKit
 
 class DrawView: UIView {
+    @IBOutlet weak var velocityLabel: UILabel!
+    
     var currentLines = [NSValue:Line]()
     var finishedLines = [Line]()
     var moveRecognizer: UIPanGestureRecognizer!
+    // 메뉴 컨트롤러 전역화..
+    let menu = UIMenuController.shared
     var selectedLineIndex: Int? {
         didSet {
             // selected == nil일 때, menu 없애기...
             if selectedLineIndex == nil {
-                let menu = UIMenuController.shared
                 menu.setMenuVisible(false, animated: true)
             }
         }
     }
-    
+    var velocity: CGPoint?
     
     @IBInspectable var finishedLineColor: UIColor = UIColor.black {
         didSet {
@@ -46,134 +49,6 @@ class DrawView: UIView {
         return true
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTap(_:)))
-        doubleTapRecognizer.numberOfTapsRequired = 2
-        // 더블탭 삭제 시, 한번 탭으로 생기는 빨간 점. 더블 탭 중 began 메소드 딜레이 시키기..
-        doubleTapRecognizer.delaysTouchesBegan = true
-        addGestureRecognizer(doubleTapRecognizer)
-        
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(_:)))
-        tapRecognizer.delaysTouchesBegan = true
-        // tab 인식 메소드를 가로채서 실패로 만들고, 더블탭 인식 메소드 실행.
-        tapRecognizer.require(toFail: doubleTapRecognizer)
-        addGestureRecognizer(tapRecognizer)
-        
-        // longPress...
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
-        addGestureRecognizer(longPressRecognizer)
-        
-        moveRecognizer = UIPanGestureRecognizer(target: self, action: #selector(moveLine(_:)))
-        // true일 경우, touch는 무시함..pan(moveRecognizer)만 수행함...
-        moveRecognizer.cancelsTouchesInView = false
-        moveRecognizer.delegate = self
-        addGestureRecognizer(moveRecognizer)
-    }
-    
-    @objc func moveLine(_ gestureRecognizer: UIPanGestureRecognizer) {
-        print("Recognized a pan")
-        
-        // 선 선택되면..
-        if let index = selectedLineIndex {
-            
-            // 팬 인식기 위치가 변하면...
-            if gestureRecognizer.state == .changed {
-                // 변화된 위치 받아오기
-                let translation = gestureRecognizer.translation(in: self)
-                
-                // 위치 세팅
-                finishedLines[index].begin.x += translation.x
-                finishedLines[index].begin.y += translation.y
-                finishedLines[index].end.x += translation.x
-                finishedLines[index].end.y += translation.y
-                
-                // 이동 할때마다 위치가 반복적으로 더해져서, 이동할수록 더 많이 멀어지는 현상 발생...
-                // 이동 후의 위치를 제로 포인트로 재설정.
-                gestureRecognizer.setTranslation(CGPoint.zero, in: self)
-                
-                setNeedsDisplay()
-            }
-        } else {
-            return
-        }
-    }
-    
-    @objc func tap(_ gestureRecognizer: UIGestureRecognizer) {
-        print("Recognized a tap")
-        
-        let point = gestureRecognizer.location(in: self)
-        selectedLineIndex = indexOfLineAtPoint(point: point)
-        
-        // 메뉴 컨트롤러...
-        let menu = UIMenuController.shared
-        
-        if selectedLineIndex != nil {
-            // DrawView를 메뉴 아이템 액션 메시지의 타깃으로..
-            becomeFirstResponder()
-            
-            // delete item 생성..
-            let deleteItem = UIMenuItem(title: "Delete", action: #selector(deleteLine(_:)))
-            menu.menuItems = [deleteItem]
-            
-            // 메뉴가 나타날 영역을 정하고, 그 위치에 보이게 설정..
-            menu.setTargetRect(CGRect(x: point.x, y: point.y, width: 2, height: 2), in: self)
-            menu.setMenuVisible(true, animated: true)
-        } else {
-            // 선택된 선이 없으면 메뉴 히든...
-            menu.setMenuVisible(false, animated: true)
-        }
-        
-        setNeedsDisplay()
-    }
-    
-    @objc func longPress(_ gestureRecognizer: UIGestureRecognizer) {
-        print("Recognized a long press")
-        
-        if gestureRecognizer.state == .began {
-            let point = gestureRecognizer.location(in: self)
-            selectedLineIndex = indexOfLineAtPoint(point: point)
-            
-            if selectedLineIndex != nil {
-                currentLines.removeAll(keepingCapacity: false)
-            }
-        } else if gestureRecognizer.state == .ended {
-            selectedLineIndex = nil
-        }
-        setNeedsDisplay()
-    }
-    
-    @objc func deleteLine(_ sender: AnyObject) {
-        // finishedLines 에서 선택한 선 제거..
-        if let index = selectedLineIndex {
-            finishedLines.remove(at: index)
-            selectedLineIndex = nil
-            
-            setNeedsDisplay()
-        }
-    }
-    
-    @objc func doubleTap(_ gestureRecognizer: UIGestureRecognizer) {
-        print("Recognized a double tap")
-        
-        selectedLineIndex = nil
-        currentLines.removeAll(keepingCapacity: false)
-        finishedLines.removeAll(keepingCapacity: false)
-        setNeedsDisplay()
-    }
-    
-    func strokeLine(line: Line) {
-        let path = UIBezierPath()
-        path.lineWidth = lineThickness
-        path.lineCapStyle = CGLineCap.round
-        
-        path.move(to: line.begin)
-        path.addLine(to: line.end)
-        path.stroke()
-        
-    }
-    
     override func draw(_ rect: CGRect) {
         // 완성된 선은 검은 색...
         finishedLineColor.setStroke()
@@ -192,6 +67,17 @@ class DrawView: UIView {
             let selectedLine = finishedLines[index]
             strokeLine(line: selectedLine)
         }
+    }
+    
+    func strokeLine(line: Line) {
+        let path = UIBezierPath()
+        path.lineWidth = lineThickness
+        path.lineCapStyle = CGLineCap.round
+        
+        path.move(to: line.begin)
+        path.addLine(to: line.end)
+        path.stroke()
+        
     }
     
     func indexOfLineAtPoint(point: CGPoint) -> Int? {
@@ -263,6 +149,156 @@ class DrawView: UIView {
         setNeedsDisplay()
     }
     
+    /// UIGestureRecognizer
+    ///
+    /// - Parameter aDecoder: aDecoder description
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTap(_:)))
+        doubleTapRecognizer.numberOfTapsRequired = 2
+        // 더블탭 삭제 시, 한번 탭으로 생기는 빨간 점. 더블 탭 중 began 메소드 딜레이 시키기..
+        doubleTapRecognizer.delaysTouchesBegan = true
+        addGestureRecognizer(doubleTapRecognizer)
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(_:)))
+        tapRecognizer.delaysTouchesBegan = true
+        // tab 인식 메소드를 가로채서 실패로 만들고, 더블탭 인식 메소드 실행.
+        tapRecognizer.require(toFail: doubleTapRecognizer)
+        addGestureRecognizer(tapRecognizer)
+        
+        // longPress...
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
+        addGestureRecognizer(longPressRecognizer)
+        
+        moveRecognizer = UIPanGestureRecognizer(target: self, action: #selector(moveLine(_:)))
+        // true일 경우, touch는 무시함..pan(moveRecognizer)만 수행함...
+        moveRecognizer.cancelsTouchesInView = false
+        moveRecognizer.delegate = self
+        addGestureRecognizer(moveRecognizer)
+        
+        let swipeColorRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeColor(_:)))
+        swipeColorRecognizer.direction = .up
+        swipeColorRecognizer.numberOfTouchesRequired = 3
+        swipeColorRecognizer.delegate = self
+        swipeColorRecognizer.cancelsTouchesInView = true
+        addGestureRecognizer(swipeColorRecognizer)
+    }
+    
+    @objc func moveLine(_ gestureRecognizer: UIPanGestureRecognizer) {
+        print("Recognized a pan")
+        // 선 이동 시, 메뉴 닫기..
+        menu.setMenuVisible(false, animated: true)
+        // 선 선택하고, 다른 선 그리면 선택된 선이 따라서 이동하는 현상 수정..
+        let point = gestureRecognizer.location(in: self)
+        let index = indexOfLineAtPoint(point: point)
+        
+        if selectedLineIndex == nil {
+            return
+        }
+        
+        // 펜 이동 속도 측정..
+        velocity = gestureRecognizer.velocity(in: self)
+        if velocity != nil {
+            velocityLabel.text = String.init(format: "Velocity\nx: %ld\ny: %ld", velocity!.x, velocity!.y)
+        } else {
+            velocityLabel.text = ""
+        }
+        
+        // 선 선택되면..
+        if index == selectedLineIndex {
+            // 팬 인식기 위치가 변하면...
+            if gestureRecognizer.state == .changed {
+                // 변화된 위치 받아오기
+                let translation = gestureRecognizer.translation(in: self)
+                
+                // 위치 세팅
+                finishedLines[index!].begin.x += translation.x
+                finishedLines[index!].begin.y += translation.y
+                finishedLines[index!].end.x += translation.x
+                finishedLines[index!].end.y += translation.y
+                
+                // 이동 할때마다 위치가 반복적으로 더해져서, 이동할수록 더 많이 멀어지는 현상 발생...
+                // 이동 후의 위치를 제로 포인트로 재설정.
+                gestureRecognizer.setTranslation(CGPoint.zero, in: self)
+                
+                setNeedsDisplay()
+            }
+        } else {
+            selectedLineIndex = nil
+            return
+        }
+    }
+    
+    @objc func tap(_ gestureRecognizer: UIGestureRecognizer) {
+        print("Recognized a tap")
+        
+        let point = gestureRecognizer.location(in: self)
+        selectedLineIndex = indexOfLineAtPoint(point: point)
+        
+        if selectedLineIndex != nil {
+            // DrawView를 메뉴 아이템 액션 메시지의 타깃으로..
+            becomeFirstResponder()
+            
+            // delete item 생성..
+            let deleteItem = UIMenuItem(title: "Delete", action: #selector(deleteLine(_:)))
+            menu.menuItems = [deleteItem]
+            
+            // 메뉴가 나타날 영역을 정하고, 그 위치에 보이게 설정..
+            menu.setTargetRect(CGRect(x: point.x, y: point.y, width: 2, height: 2), in: self)
+            menu.setMenuVisible(true, animated: true)
+        } else {
+            // 선택된 선이 없으면 메뉴 히든...
+            menu.setMenuVisible(false, animated: true)
+        }
+        
+        setNeedsDisplay()
+    }
+    
+    @objc func longPress(_ gestureRecognizer: UIGestureRecognizer) {
+        print("Recognized a long press")
+        
+        menu.setMenuVisible(false, animated: true)
+        
+        if gestureRecognizer.state == .began {
+            let point = gestureRecognizer.location(in: self)
+            selectedLineIndex = indexOfLineAtPoint(point: point)
+            
+            if selectedLineIndex != nil {
+                currentLines.removeAll(keepingCapacity: false)
+            }
+        } else if gestureRecognizer.state == .ended {
+            selectedLineIndex = nil
+        }
+        setNeedsDisplay()
+    }
+    
+    @objc func deleteLine(_ sender: AnyObject) {
+        // finishedLines 에서 선택한 선 제거..
+        if let index = selectedLineIndex {
+            finishedLines.remove(at: index)
+            selectedLineIndex = nil
+            
+            setNeedsDisplay()
+        }
+    }
+    
+    @objc func doubleTap(_ gestureRecognizer: UIGestureRecognizer) {
+        print("Recognized a double tap")
+        
+        selectedLineIndex = nil
+        currentLines.removeAll(keepingCapacity: false)
+        finishedLines.removeAll(keepingCapacity: false)
+        setNeedsDisplay()
+    }
+    
+    @objc func swipeColor(_ gestureRecognizer: UISwipeGestureRecognizer) {
+        print("Recogniized a Swipe")
+        
+        // 스와이프 동작 확인..pass..
+        
+    }
+    
 }
 
 // MARK: - UIGestureRecognizerDelegate
@@ -272,3 +308,4 @@ extension DrawView: UIGestureRecognizerDelegate {
         return true
     }
 }
+
